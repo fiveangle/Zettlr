@@ -11,6 +11,7 @@ import { clearTable, deleteTable, setAlignment } from './commands/tables'
 import { type EditorShortcutName, getCustomShortcut } from '../keymaps/shortcuts'
 import { configField } from '../util/configuration'
 import { cmShortcutToElectron } from 'source/common/util/shortcuts'
+import { getMacOSLookupItem } from '../context-menu/macos-lookup-item'
 
 export function displayTableContextMenu (event: MouseEvent, mainView: EditorView, subviewOrView: EditorView): void {
   const config = mainView.state.field(configField, false)
@@ -226,6 +227,11 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
       ]
     }
   ]
+
+  const lookupItem = getMacOSLookupItem(subviewOrView)
+  if (lookupItem !== undefined) {
+    template.unshift(lookupItem, { type: 'separator' })
+  }
 
   const point = { x: event.clientX, y: event.clientY }
   showPopupMenu(point, template)
