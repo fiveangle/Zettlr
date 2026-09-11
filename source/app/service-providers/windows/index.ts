@@ -193,7 +193,7 @@ export default class WindowProvider extends ProviderContract {
         case 'selectAll':
           event.sender.selectAll()
           break
-        // // Electron's showDefinitionForSelection() API is only available on macOS.
+        // Electron's showDefinitionForSelection() API is only available on macOS.
         case 'show-definition-for-selection':
           if (process.platform === 'darwin') {
             event.sender.showDefinitionForSelection()

@@ -185,7 +185,19 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
     { type: 'separator' }
   )
 
-  const tpl: AnyMenuItem[] = [
+  const tpl: AnyMenuItem[] = []
+
+  // If we found a diagnostic earlier and a word, add the suggestion items
+  if (diagnostic !== undefined && misspelledWord !== undefined) {
+    tpl.push(...suggestionItems)
+  }
+
+  const lookupItem = getMacOSLookupItem(view)
+  if (lookupItem !== undefined) {
+    tpl.push(lookupItem, { type: 'separator' })
+  }
+
+  tpl.push(
     {
       label: trans('Bold'),
       accelerator: 'CmdOrCtrl+B',
@@ -279,17 +291,7 @@ export async function defaultMenu (view: EditorView, node: SyntaxNode, coords: {
       type: 'separator'
     },
     getTransformSubmenu(view)
-  ]
-
-  const lookupItem = getMacOSLookupItem(view)
-  if (lookupItem !== undefined) {
-    tpl.unshift(lookupItem, { type: 'separator' })
-  }
-
-  // If we found a diagnostic earlier and a word, add the suggestion items
-  if (diagnostic !== undefined && misspelledWord !== undefined) {
-    tpl.unshift(...suggestionItems)
-  }
+  )
 
   showPopupMenu(coords, tpl)
 }

@@ -21,7 +21,14 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
     return cmShortcutToElectron(getCustomShortcut(name, customShortcutMap))
   }
 
-  const template: AnyMenuItem[] = [
+  const template: AnyMenuItem[] = []
+
+  const lookupItem = getMacOSLookupItem(subviewOrView)
+  if (lookupItem !== undefined) {
+    template.push(lookupItem, { type: 'separator' })
+  }
+
+  template.push(
     {
       label: trans('Bold'),
       accelerator: 'CmdOrCtrl+B',
@@ -226,12 +233,7 @@ export function displayTableContextMenu (event: MouseEvent, mainView: EditorView
         }
       ]
     }
-  ]
-
-  const lookupItem = getMacOSLookupItem(subviewOrView)
-  if (lookupItem !== undefined) {
-    template.unshift(lookupItem, { type: 'separator' })
-  }
+  )
 
   const point = { x: event.clientX, y: event.clientY }
   showPopupMenu(point, template)
